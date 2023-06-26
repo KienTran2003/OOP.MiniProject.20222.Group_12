@@ -59,7 +59,7 @@ public class SliderController implements Initializable {
 
     void update(){
         double appliedForce = slider.getValue();
-        double acceleration = (appliedForce + cubicBox.friction(appliedForce, staticCoefficient, kineticCoefficient, cubicBox.getVelocity()))/cubicBox.getMass();
+        double acceleration = (appliedForce + cubicBox.friction(appliedForce, staticCoefficient, kineticCoefficient))/cubicBox.getMass();
         cubicBox.setAcceleration(acceleration);
         if (cubicBox.getVelocity()*(cubicBox.getVelocity() + 0.01 * acceleration) < 0 ){
             cubicBox.setVelocity(0);
