@@ -47,7 +47,7 @@ public class SceneController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         staticCoefficient = 0.4;
         kineticCoefficient = 0.3;
-        cubicBox = new CubicBox(20, 20,0,0);
+        cubicBox = new CubicBox(20, 20);
         //Load road
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("road.fxml"));
