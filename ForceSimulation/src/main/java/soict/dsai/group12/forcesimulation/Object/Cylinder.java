@@ -35,11 +35,25 @@ public class Cylinder extends MainObject implements Rotable{
 
     @Override
     public double friction(double appliedForce, double staticCoeffient, double kineticCoefficient) {
-        return 0;
+
+        if (Math.abs(appliedForce) <= 3*this.normalForce()*staticCoeffient && this.getVelocity() == 0){
+            return -appliedForce/3;
+        } else if (Math.abs(appliedForce) > 3*this.normalForce()*staticCoeffient && this.getVelocity() == 0) {
+            if (appliedForce > 0){
+                return -this.normalForce()*kineticCoefficient;
+            } else {
+                return this.normalForce()*kineticCoefficient;
+            }
+        } else if (this.getVelocity() <0){
+            return this.normalForce()*kineticCoefficient;
+        } else {
+            return -this.normalForce()*kineticCoefficient;
+        }
     }
 
-    @Override
-    public void calculateGamma(double friction, double mass, double radius) {
 
+    @Override
+    public double calculateGamma(double friction, double mass, double radius) {
+        return -2*friction/(mass*radius);
     }
 }
