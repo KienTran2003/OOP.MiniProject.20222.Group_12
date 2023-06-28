@@ -4,12 +4,16 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="500.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="500.0" fitWidth="1500.0" pickOnBounds="true">
+      <ImageView fx:id="img1" fitHeight="500.0" fitWidth="1501.0" pickOnBounds="true">
          <image>
-            <Image url="@background.jpg" />
+            <Image url="@Iamge/top_background.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="img2" fitHeight="500.0" fitWidth="1500.0" layoutX="-1500.0" pickOnBounds="true">
+         <image>
+            <Image url="@Iamge/top_background.png" />
          </image>
       </ImageView>
    </children>
