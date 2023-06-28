@@ -18,7 +18,7 @@ public class ForceSimulation extends Application {
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("scene.fxml"));
 
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Force Simulation");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();

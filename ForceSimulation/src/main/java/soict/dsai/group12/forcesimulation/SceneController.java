@@ -7,8 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
@@ -31,15 +33,28 @@ public class SceneController implements Initializable {
     private MainObject mainObject;
     private Rotate rotation = new Rotate();
     private SliderController sliderController;
+    private InfoController infoController;
+    private CheckboxController checkboxController;
+    private BackgroundController backgroundController;
+    private ForceController forceController;
 
 
 
-    RoadController roadController;
+    private RoadController roadController;
 
     @FXML
     AnchorPane roadPane;
     @FXML
     AnchorPane sliderPane;
+    @FXML
+    AnchorPane infoPane;
+    @FXML
+    AnchorPane checkboxPane;
+    @FXML
+    AnchorPane backgroundPane;
+    @FXML
+    AnchorPane vectorPane;
+
     @FXML
     Button btnStop, btnPlay, btnRestart;
     @FXML
@@ -48,11 +63,23 @@ public class SceneController implements Initializable {
     Rectangle recBox;
     @FXML
     TextField textMass;
+    @FXML
+    Slider staticSlider, kineticSlider;
 
     KeyFrame keyFrame = new KeyFrame(originalDuration, event -> {
         roadController.move(sliderController.getMainObject().getVelocity());
 
+
         rotation.setAngle(rotation.getAngle() + cylinder.getVelocity());
+        textMass.setText(sliderController.getMainObject().getMass() + " Kg");
+        if (recBox.getLayoutX() == 500 || circle.getLayoutX() == 600){
+            textMass.setVisible(checkboxController.getMassBox());
+        }
+        infoController.showAccelerate(checkboxController.getAccelerateBox());
+        infoController.showPosi(checkboxController.getPosiBox());
+        infoController.showVelo(checkboxController.getVeloBox());
+
+
 
     });
     Timeline timeline = new Timeline(keyFrame);
@@ -64,14 +91,17 @@ public class SceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        staticCoefficient = 0.4;
-        kineticCoefficient = 0.3;
+        staticCoefficient = 0;
+        kineticCoefficient = 0;
         cubicBox = new CubicBox(20, 20);
         cylinder = new Cylinder(5,20);
         rotation.setPivotX(circle.getCenterX()); // Set pivot point at the center of the circle
         rotation.setPivotY(circle.getCenterY());
         rotation.setAngle(0); // Set rotation speed (in degrees per frame)
         circle.getTransforms().add(rotation);
+
+        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\cube_image.png")));
+
 
 
         //Load road
@@ -85,10 +115,32 @@ public class SceneController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        //Load vector pane
+
+        FXMLLoader loaderVector = new FXMLLoader(getClass().getResource("force.fxml"));
+        forceController = new ForceController();
+        loaderVector.setController(forceController);
+        try {
+            vectorPane.getChildren().add(loaderVector.load());
+
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+
+        // Load check box pane
+        FXMLLoader loaderCheckBox = new FXMLLoader(getClass().getResource("checkbox.fxml"));
+        checkboxController = new CheckboxController();
+        loaderCheckBox.setController(checkboxController);
+        try {
+            checkboxPane.getChildren().add(loaderCheckBox.load());
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
         //Load slider
         FXMLLoader loaderSlider = new FXMLLoader(getClass().getResource("slider.fxml"));
 
-        sliderController = new SliderController(cylinder, staticCoefficient, kineticCoefficient);
+        sliderController = new SliderController(cylinder, staticCoefficient, kineticCoefficient, forceController, checkboxController);
 
         loaderSlider.setController(sliderController);
 
@@ -97,6 +149,40 @@ public class SceneController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // Load information slider
+        FXMLLoader loaderInfo = new FXMLLoader(getClass().getResource("info.fxml"));
+
+        infoController = new InfoController(sliderController.getMainObject());
+
+        loaderInfo.setController(infoController);
+
+        try {
+            infoPane.getChildren().add(loaderInfo.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+        //Load background pane
+        FXMLLoader loaderBackground = new FXMLLoader(getClass().getResource("background.fxml"));
+        backgroundController = new BackgroundController();
+        loaderBackground.setController(backgroundController);
+        try {
+            backgroundPane.getChildren().add(loaderBackground.load());
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+
+        staticSlider.setOnMouseDragged(e -> {
+            this.staticCoefficient = staticSlider.getValue();
+            sliderController.setStaticCoefficient(staticCoefficient);
+        });
+        kineticSlider.setOnMouseDragged(e -> {
+            this.kineticCoefficient = kineticSlider.getValue();
+            sliderController.setKineticCoefficient(kineticCoefficient);
+        });
 
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -112,7 +198,9 @@ public class SceneController implements Initializable {
     }
     @FXML
     void btnRestartPressed(){
-
+        sliderController.getMainObject().resetObject();
+        roadController.restartRoad();
+        timeline.play();
     }
     @FXML
     void setBox(){
@@ -121,21 +209,14 @@ public class SceneController implements Initializable {
                 recBox.setLayoutX(300);
                 recBox.setLayoutY(640);
                 sliderController.setDisableSlider(true);
+                textMass.setVisible(false);
             }
 
         } else {
-//            if (cylinder.getVelocity() == 0) {
-//                if (circle.getLayoutX() == 600) {
-//                    circle.setLayoutX(160);
-//                    circle.setLayoutY(740);
-//                }
-//                recBox.setLayoutX(500);
-//                recBox.setLayoutY(300);
-//                sliderController.setMainObject(cubicBox);
-//                sliderController.setDisableSlider(false);
-//
-//            }
-            cubicBoxInput();
+            if (cylinder.getVelocity() == 0){
+                cubicBoxInput();
+            }
+
         }
     }
     @FXML
@@ -145,20 +226,13 @@ public class SceneController implements Initializable {
                 circle.setLayoutX(160);
                 circle.setLayoutY(740);
                 sliderController.setDisableSlider(true);
+                textMass.setVisible(false);
             }
         } else {
-//            if (cubicBox.getVelocity() == 0) {
-//                if (recBox.getLayoutX() == 500) {
-//                    recBox.setLayoutX(300);
-//                    recBox.setLayoutY(640);
-//                }
-//                circle.setLayoutX(600);
-//                circle.setLayoutY(400);
-//                sliderController.setMainObject(cylinder);
-//                sliderController.setDisableSlider(false);
-//                cylinderInput();
-//            }
-            cylinderInput();
+            if (cubicBox.getVelocity() == 0){
+                cylinderInput();
+            }
+
         }
     }
 
@@ -202,16 +276,21 @@ public class SceneController implements Initializable {
                     double radius = Double.parseDouble(radiusInput);
                     cylinder.setMass(mass);
                     cylinder.setSide(radius);
-                    if (cubicBox.getVelocity() == 0) {
-                        if (recBox.getLayoutX() == 500) {
-                            recBox.setLayoutX(300);
-                            recBox.setLayoutY(640);
-                        }
-                        circle.setLayoutX(600);
-                        circle.setLayoutY(400);
-                        sliderController.setMainObject(cylinder);
-                        sliderController.setDisableSlider(false);
+
+                    if (recBox.getLayoutX() == 500) {
+                        recBox.setLayoutX(300);
+                        recBox.setLayoutY(640);
                     }
+                    circle.setLayoutX(600);
+                    circle.setLayoutY(400);
+                    cylinder.resetObject();
+                    sliderController.setMainObject(cylinder);
+                    infoController.setMainObject(cylinder);
+                    sliderController.setDisableSlider(false);
+
+
+
+
 
                 } catch (NumberFormatException e) {
                     // Handle invalid input
@@ -266,17 +345,20 @@ public class SceneController implements Initializable {
                     double radius = Double.parseDouble(sideInput);
                     cubicBox.setMass(mass);
                     cubicBox.setSide(radius);
-                    if (cylinder.getVelocity() == 0) {
-                        if (circle.getLayoutX() == 600) {
-                            circle.setLayoutX(160);
-                            circle.setLayoutY(740);
-                        }
-                        recBox.setLayoutX(500);
-                        recBox.setLayoutY(300);
-                        sliderController.setMainObject(cubicBox);
-                        sliderController.setDisableSlider(false);
 
+                    if (circle.getLayoutX() == 600) {
+                        circle.setLayoutX(160);
+                        circle.setLayoutY(740);
                     }
+                    recBox.setLayoutX(500);
+                    recBox.setLayoutY(300);
+                    cubicBox.resetObject();
+                    sliderController.setMainObject(cubicBox);
+                    infoController.setMainObject(cubicBox);
+                    sliderController.setDisableSlider(false);
+
+
+
 
                 } catch (NumberFormatException e) {
                     // Handle invalid input
@@ -291,5 +373,6 @@ public class SceneController implements Initializable {
 
         });
     }
+
 
 }

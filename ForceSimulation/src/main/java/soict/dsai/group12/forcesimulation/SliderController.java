@@ -7,19 +7,29 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import soict.dsai.group12.forcesimulation.Object.CubicBox;
+
 import soict.dsai.group12.forcesimulation.Object.Cylinder;
 import soict.dsai.group12.forcesimulation.Object.MainObject;
 
 public class SliderController implements Initializable {
 
     private MainObject mainObject;
+    private ForceController forceController;
+    private CheckboxController checkboxController;
     private Timeline sliderTimeline;
+
+    public void setStaticCoefficient(double staticCoefficient) {
+        this.staticCoefficient = staticCoefficient;
+    }
+
+    public void setKineticCoefficient(double kineticCoefficient) {
+        this.kineticCoefficient = kineticCoefficient;
+    }
+
     private double staticCoefficient, kineticCoefficient;
 
     @FXML
@@ -28,10 +38,12 @@ public class SliderController implements Initializable {
     Label forceLabel;
 
 
-    public SliderController(MainObject mainObject, double staticCoefficient, double kineticCoefficient){
+    public SliderController(MainObject mainObject, double staticCoefficient, double kineticCoefficient, ForceController forceController, CheckboxController checkboxController){
         this.mainObject =  mainObject;
         this.staticCoefficient = staticCoefficient;
         this.kineticCoefficient = kineticCoefficient;
+        this.forceController = forceController;
+        this.checkboxController = checkboxController;
     }
 
     public void setMainObject(MainObject mainObject) {
@@ -40,6 +52,9 @@ public class SliderController implements Initializable {
 
     public MainObject getMainObject() {
         return mainObject;
+    }
+    public Slider getSlider(){
+        return slider;
     }
 
     @Override
@@ -54,6 +69,10 @@ public class SliderController implements Initializable {
             KeyFrame newKeyFrame = new KeyFrame(newDuration,event -> {
                 update();
             });;
+
+            forceController.updateAppForceVector(slider.getValue(), checkboxController.getForceBox());
+            forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox());
+
             sliderTimeline = new Timeline(newKeyFrame);
             sliderTimeline.setCycleCount(Animation.INDEFINITE);
             sliderTimeline.play();
@@ -65,6 +84,8 @@ public class SliderController implements Initializable {
             String formattedValue = String.format("%.0f", slider.getValue());
             forceLabel.setText(formattedValue + " newtons");
 
+            forceController.updateAppForceVector(slider.getValue(), checkboxController.getForceBox());
+            forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox() );
 
 
 
@@ -81,6 +102,8 @@ public class SliderController implements Initializable {
 
     void update(){
         double appliedForce = slider.getValue();
+        forceController.updateFrictionVector(mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getForceBox());
+        forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox());
         double acceleration = (appliedForce + mainObject.friction(appliedForce, staticCoefficient, kineticCoefficient))/mainObject.getMass();
         mainObject.setAcceleration(acceleration);
         if (mainObject.getVelocity()*(mainObject.getVelocity() + 0.01 * acceleration) < 0 ){
@@ -88,8 +111,9 @@ public class SliderController implements Initializable {
         } else {
             mainObject.setVelocity(mainObject.getVelocity() + 0.01 * acceleration);
         }
+        mainObject.setPosition(mainObject.getPosition() + 0.01*mainObject.getVelocity());
         if (mainObject instanceof Cylinder){
-            double newGamma = ((Cylinder) mainObject).calculateGamma(mainObject.friction(appliedForce, staticCoefficient, kineticCoefficient), mainObject.getMass(), mainObject.getMass());
+            double newGamma = ((Cylinder) mainObject).calculateGamma(mainObject.friction(appliedForce, staticCoefficient, kineticCoefficient), mainObject.getMass(), mainObject.getSide());
             ((Cylinder) mainObject).setGamma(newGamma);
             if (((Cylinder) mainObject).getOmega()*(((Cylinder) mainObject).getOmega() + 0.01*newGamma) < 0){
                 ((Cylinder) mainObject).setOmega(0);

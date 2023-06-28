@@ -28,6 +28,15 @@ public class Cylinder extends MainObject implements Rotable{
     public void setTheta(double theta) {
         this.theta = theta;
     }
+    @Override
+    public void resetObject(){
+        this.setAcceleration(0);
+        this.setVelocity(0);
+        this.setPosition(0);
+        this.setGamma(0);
+        this.setOmega(0);
+        this.setTheta(0);
+    }
 
     public Cylinder(double radius, double mass){
         super(radius, mass);
@@ -49,6 +58,16 @@ public class Cylinder extends MainObject implements Rotable{
         } else {
             return -this.normalForce()*kineticCoefficient;
         }
+//        if (Math.abs(appliedForce) <= 3*this.normalForce()*staticCoeffient){
+//            return -appliedForce/3;
+//        } else {
+//            if (appliedForce > 0) {
+//                return -this.normalForce() * kineticCoefficient;
+//            } else {
+//                return this.normalForce() * kineticCoefficient;
+//            }
+//        }
+
     }
 
 
