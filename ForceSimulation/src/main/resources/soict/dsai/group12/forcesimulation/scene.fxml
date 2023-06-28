@@ -11,9 +11,9 @@
 
 <AnchorPane prefHeight="900.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="soict.dsai.group12.forcesimulation.SceneController">
    <children>
+      <AnchorPane fx:id="backgroundPane" prefHeight="500.0" prefWidth="1500.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c99976" height="400.0" layoutY="545.0" stroke="BLACK" strokeType="INSIDE" width="1500.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d2d3d4" height="200.0" layoutX="559.0" layoutY="640.0" stroke="BLACK" strokeType="INSIDE" width="501.0" />
-      <AnchorPane fx:id="backgroundPane" layoutX="-4.0" prefHeight="500.0" prefWidth="1500.0" />
       <AnchorPane fx:id="roadPane" disable="true" layoutY="500.0" prefHeight="45.0" prefWidth="1500.0" />
       <AnchorPane fx:id="sliderPane" layoutX="576.0" layoutY="666.0" prefHeight="145.0" prefWidth="461.0" />
       <Button fx:id="btnStop" layoutX="1114.0" layoutY="424.0" mnemonicParsing="false" onAction="#btnStopPressed" text="Stop" />

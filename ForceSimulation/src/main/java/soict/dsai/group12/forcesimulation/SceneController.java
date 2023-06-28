@@ -79,6 +79,8 @@ public class SceneController implements Initializable {
         infoController.showPosi(checkboxController.getPosiBox());
         infoController.showVelo(checkboxController.getVeloBox());
 
+        backgroundController.move(sliderController.getMainObject().getVelocity());
+
 
 
     });
@@ -100,7 +102,7 @@ public class SceneController implements Initializable {
         rotation.setAngle(0); // Set rotation speed (in degrees per frame)
         circle.getTransforms().add(rotation);
 
-        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\cube_image.png")));
+        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Iamge\\cube_image.png")));
 
 
 
@@ -175,11 +177,21 @@ public class SceneController implements Initializable {
             throw new RuntimeException(e);
         }
 
+
+        //Set funtion on slider to change friction coefficient
         staticSlider.setOnMouseDragged(e -> {
             this.staticCoefficient = staticSlider.getValue();
             sliderController.setStaticCoefficient(staticCoefficient);
         });
+        staticSlider.setOnMouseClicked(e -> {
+            this.staticCoefficient = staticSlider.getValue();
+            sliderController.setStaticCoefficient(staticCoefficient);
+        });
         kineticSlider.setOnMouseDragged(e -> {
+            this.kineticCoefficient = kineticSlider.getValue();
+            sliderController.setKineticCoefficient(kineticCoefficient);
+        });
+        kineticSlider.setOnMouseClicked(e -> {
             this.kineticCoefficient = kineticSlider.getValue();
             sliderController.setKineticCoefficient(kineticCoefficient);
         });
