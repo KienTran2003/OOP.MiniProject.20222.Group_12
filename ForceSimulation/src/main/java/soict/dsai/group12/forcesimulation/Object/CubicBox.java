@@ -24,5 +24,7 @@ public class CubicBox extends MainObject{
         } else {
             return -this.normalForce()*kineticCoefficient;
         }
+
+
     }
 }

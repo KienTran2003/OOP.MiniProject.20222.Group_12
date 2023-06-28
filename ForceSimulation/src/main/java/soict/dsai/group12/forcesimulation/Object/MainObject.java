@@ -3,8 +3,10 @@ package soict.dsai.group12.forcesimulation.Object;
 public abstract class MainObject {
     private double side;
     private double mass;
+    private double position = 0;
     private double velocity = 0;
     private double acceleration = 0;
+
 
 
     public MainObject(double side, double mass) {
@@ -45,7 +47,18 @@ public abstract class MainObject {
     public void setMass(double mass) {
         this.mass = mass;
     }
+    public double getPosition() {
+        return position;
+    }
 
+    public void setPosition(double position) {
+        this.position = position;
+    }
+    public void resetObject(){
+        this.acceleration = 0;
+        this.velocity = 0;
+        this.position = 0;
+    }
     public double normalForce() {
         return 10 * mass;
     }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="200.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="accLabel" layoutX="47.0" layoutY="24.0" prefHeight="23.0" prefWidth="81.0" text="Accelerate">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="posiLabel" layoutX="357.0" layoutY="26.0" text="Position">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="veloLabel" layoutX="211.0" layoutY="24.0" prefHeight="23.0" prefWidth="81.0" text="Velocity">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="anAccLabel" layoutX="25.0" layoutY="98.0" prefHeight="23.0" prefWidth="126.0" text="Angular Accelerate">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="anVeloLabel" layoutX="193.0" layoutY="98.0" prefHeight="23.0" prefWidth="117.0" text="Angular Velocity">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="anPosiLabel" layoutX="326.0" layoutY="98.0" prefHeight="23.0" prefWidth="126.0" text="Angular Position">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="accelerate" alignment="CENTER" contentDisplay="CENTER" layoutX="33.0" layoutY="51.0" prefHeight="23.0" prefWidth="108.0" text="0 m/s^2">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="velo" alignment="CENTER" layoutX="199.0" layoutY="51.0" prefHeight="23.0" prefWidth="93.0" text="0 m/s">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="posi" alignment="CENTER" layoutX="331.0" layoutY="51.0" prefHeight="23.0" prefWidth="108.0" text="0 m">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="anAccelerate" alignment="CENTER" layoutX="35.0" layoutY="133.0" prefHeight="23.0" prefWidth="93.0" text="0 */s^2">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="anVelo" alignment="CENTER" layoutX="199.0" layoutY="133.0" prefHeight="23.0" prefWidth="93.0" text="0 */s">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="anPosi" alignment="CENTER" layoutX="343.0" layoutY="133.0" prefHeight="23.0" prefWidth="108.0" text="0 *">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
