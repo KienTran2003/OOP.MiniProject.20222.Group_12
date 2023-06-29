@@ -224,6 +224,12 @@ public class SceneController implements Initializable {
         sliderController.getMainObject().resetObject();
         roadController.restartRoad();
         btnStop.setText("Stop");
+        this.staticCoefficient = 0;
+        this.kineticCoefficient = 0;
+        sliderController.setStaticCoefficient(0);
+        sliderController.setKineticCoefficient(0);
+        kineticSlider.setValue(0);
+        staticSlider.setValue(0);
         timeline.play();
     }
     @FXML
