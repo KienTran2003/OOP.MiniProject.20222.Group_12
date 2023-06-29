@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.ImagePattern;
@@ -20,6 +21,8 @@ import soict.dsai.group12.forcesimulation.Object.CubicBox;
 import soict.dsai.group12.forcesimulation.Object.Cylinder;
 import soict.dsai.group12.forcesimulation.Object.MainObject;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -56,7 +59,7 @@ public class SceneController implements Initializable {
     AnchorPane vectorPane;
 
     @FXML
-    Button btnStop, btnPlay, btnRestart;
+    Button btnStop, btnRestart;
     @FXML
     Circle circle;
     @FXML
@@ -96,16 +99,23 @@ public class SceneController implements Initializable {
         staticCoefficient = 0;
         kineticCoefficient = 0;
         cubicBox = new CubicBox(20, 20);
-        cylinder = new Cylinder(5,20);
+        cylinder = new Cylinder(5, 20);
         rotation.setPivotX(circle.getCenterX()); // Set pivot point at the center of the circle
         rotation.setPivotY(circle.getCenterY());
         rotation.setAngle(0); // Set rotation speed (in degrees per frame)
         circle.getTransforms().add(rotation);
 
-        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Iamge\\cube_image.png")));
-
-
-
+        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cube_image.png")));
+//        btnStop.getStyleClass().add("button");
+//        FileInputStream input;
+//        try {
+//            input = new FileInputStream("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\btn.jpg");
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+//        Image image = new Image(input);
+//        ImageView imageView = new ImageView(image);
+//        btnStop.setGraphic(imageView);
         //Load road
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("road.fxml"));
@@ -126,7 +136,7 @@ public class SceneController implements Initializable {
         try {
             vectorPane.getChildren().add(loaderVector.load());
 
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -136,7 +146,7 @@ public class SceneController implements Initializable {
         loaderCheckBox.setController(checkboxController);
         try {
             checkboxPane.getChildren().add(loaderCheckBox.load());
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         //Load slider
@@ -166,14 +176,13 @@ public class SceneController implements Initializable {
         }
 
 
-
         //Load background pane
         FXMLLoader loaderBackground = new FXMLLoader(getClass().getResource("background.fxml"));
         backgroundController = new BackgroundController();
         loaderBackground.setController(backgroundController);
         try {
             backgroundPane.getChildren().add(loaderBackground.load());
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -202,16 +211,23 @@ public class SceneController implements Initializable {
     }
     @FXML
     void btnStopPressed(){
-        timeline.stop();
+
+        if (timeline.getStatus() == Animation.Status.RUNNING){
+            timeline.stop();
+            btnStop.setText("Play");
+        } else {
+            timeline.play();
+            btnStop.setText("Stop");
+        }
+//        timeline.stop();
+
     }
-    @FXML
-    void btnPlayPressed(){
-        timeline.play();
-    }
+
     @FXML
     void btnRestartPressed(){
         sliderController.getMainObject().resetObject();
         roadController.restartRoad();
+        btnStop.setText("Stop");
         timeline.play();
     }
     @FXML
