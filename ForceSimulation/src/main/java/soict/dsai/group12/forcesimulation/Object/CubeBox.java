@@ -1,10 +1,10 @@
 package soict.dsai.group12.forcesimulation.Object;
 
-public class CubicBox extends MainObject{
+public class CubeBox extends MainObject{
 
 
 
-    public CubicBox(double sideLength, double mass){
+    public CubeBox(double sideLength, double mass){
         super(sideLength, mass);
 
     }

@@ -67,11 +67,12 @@ public class SliderController implements Initializable {
             if (sliderTimeline != null){sliderTimeline.stop();}
             Duration newDuration = Duration.millis(10); // Set the new duration
             KeyFrame newKeyFrame = new KeyFrame(newDuration,event -> {
+
                 update();
             });;
 
-            forceController.updateAppForceVector(slider.getValue(), checkboxController.getForceBox());
-            forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox());
+            forceController.updateAppForceVector(slider.getValue(), checkboxController.getForceBox(), checkboxController.getValueBox());
+            forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox(), checkboxController.getValueBox());
 
             sliderTimeline = new Timeline(newKeyFrame);
             sliderTimeline.setCycleCount(Animation.INDEFINITE);
@@ -84,8 +85,8 @@ public class SliderController implements Initializable {
             String formattedValue = String.format("%.0f", slider.getValue());
             forceLabel.setText(formattedValue + " newtons");
 
-            forceController.updateAppForceVector(slider.getValue(), checkboxController.getForceBox());
-            forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox() );
+            forceController.updateAppForceVector(slider.getValue(), checkboxController.getForceBox(), checkboxController.getValueBox());
+            forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox(), checkboxController.getValueBox() );
 
 
 
@@ -102,8 +103,8 @@ public class SliderController implements Initializable {
 
     void update(){
         double appliedForce = slider.getValue();
-        forceController.updateFrictionVector(mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getForceBox());
-        forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox());
+        forceController.updateFrictionVector(mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getForceBox(), checkboxController.getValueBox());
+        forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox(), checkboxController.getValueBox());
         double acceleration = (appliedForce + mainObject.friction(appliedForce, staticCoefficient, kineticCoefficient))/mainObject.getMass();
         mainObject.setAcceleration(acceleration);
         if (mainObject.getVelocity()*(mainObject.getVelocity() + 0.01 * acceleration) < 0 ){

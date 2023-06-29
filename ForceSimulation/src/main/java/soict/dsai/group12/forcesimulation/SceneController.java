@@ -8,21 +8,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
 import javafx.util.Duration;
-import soict.dsai.group12.forcesimulation.Object.CubicBox;
+import soict.dsai.group12.forcesimulation.Object.CubeBox;
 import soict.dsai.group12.forcesimulation.Object.Cylinder;
 import soict.dsai.group12.forcesimulation.Object.MainObject;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -30,7 +26,7 @@ import java.util.ResourceBundle;
 
 public class SceneController implements Initializable {
     private Duration originalDuration = Duration.millis(10);
-    private CubicBox cubicBox;
+    private CubeBox cubeBox;
     private Cylinder cylinder;
     private double staticCoefficient, kineticCoefficient;
     private MainObject mainObject;
@@ -98,7 +94,7 @@ public class SceneController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         staticCoefficient = 0;
         kineticCoefficient = 0;
-        cubicBox = new CubicBox(20, 20);
+        cubeBox = new CubeBox(20, 20);
         cylinder = new Cylinder(5, 20);
         rotation.setPivotX(circle.getCenterX()); // Set pivot point at the center of the circle
         rotation.setPivotY(circle.getCenterY());
@@ -233,7 +229,7 @@ public class SceneController implements Initializable {
     @FXML
     void setBox(){
         if (recBox.getLayoutX() == 500){
-            if (cubicBox.getVelocity() == 0) {
+            if (cubeBox.getVelocity() == 0) {
                 recBox.setLayoutX(300);
                 recBox.setLayoutY(640);
                 sliderController.setDisableSlider(true);
@@ -257,7 +253,7 @@ public class SceneController implements Initializable {
                 textMass.setVisible(false);
             }
         } else {
-            if (cubicBox.getVelocity() == 0){
+            if (cubeBox.getVelocity() == 0){
                 cylinderInput();
             }
 
@@ -371,8 +367,8 @@ public class SceneController implements Initializable {
                 try {
                     double mass = Double.parseDouble(massInput);
                     double radius = Double.parseDouble(sideInput);
-                    cubicBox.setMass(mass);
-                    cubicBox.setSide(radius);
+                    cubeBox.setMass(mass);
+                    cubeBox.setSide(radius);
 
                     if (circle.getLayoutX() == 600) {
                         circle.setLayoutX(160);
@@ -380,9 +376,9 @@ public class SceneController implements Initializable {
                     }
                     recBox.setLayoutX(500);
                     recBox.setLayoutY(300);
-                    cubicBox.resetObject();
-                    sliderController.setMainObject(cubicBox);
-                    infoController.setMainObject(cubicBox);
+                    cubeBox.resetObject();
+                    sliderController.setMainObject(cubeBox);
+                    infoController.setMainObject(cubeBox);
                     sliderController.setDisableSlider(false);
 
 
