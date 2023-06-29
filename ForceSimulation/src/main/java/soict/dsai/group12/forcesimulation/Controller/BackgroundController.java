@@ -1,4 +1,4 @@
-package soict.dsai.group12.forcesimulation;
+package soict.dsai.group12.forcesimulation.Controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

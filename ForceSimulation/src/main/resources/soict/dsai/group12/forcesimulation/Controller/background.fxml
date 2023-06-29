@@ -8,12 +8,12 @@
    <children>
       <ImageView fx:id="img1" fitHeight="500.0" fitWidth="1501.0" pickOnBounds="true">
          <image>
-            <Image url="@Image/top_background.png" />
+            <Image url="@../Image/top_background.png" />
          </image>
       </ImageView>
       <ImageView fx:id="img2" fitHeight="500.0" fitWidth="1500.0" layoutX="-1500.0" pickOnBounds="true">
          <image>
-            <Image url="@Image/top_background.png" />
+            <Image url="@../Image/top_background.png" />
          </image>
       </ImageView>
    </children>
