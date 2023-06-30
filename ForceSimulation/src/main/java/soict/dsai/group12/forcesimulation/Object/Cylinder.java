@@ -1,78 +1,113 @@
 package soict.dsai.group12.forcesimulation.Object;
 
-public class Cylinder extends MainObject implements Rotable{
-    private double gamma = 0;
-    private double omega = 0;
-    private double theta = 0;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import soict.dsai.group12.forcesimulation.Force.Force;
+import soict.dsai.group12.forcesimulation.Force.FrictionForce;
 
-    public double getGamma() {
-        return gamma;
+public class Cylinder extends MainObject implements Rotatable {
+    private DoubleProperty angle = new SimpleDoubleProperty();;
+    private DoubleProperty angAcc = new SimpleDoubleProperty();;
+    private DoubleProperty angVel = new SimpleDoubleProperty();;
+    private DoubleProperty radius = new SimpleDoubleProperty();;
+
+    public static final double MAX_RADIUS = 1.0;
+    public static final double MIN_RADIUS = 0.1;
+
+    public Cylinder() throws Exception {
+        super();
     }
 
-    public void setGamma(double gamma) {
-        this.gamma = gamma;
+    public Cylinder(double mass) throws Exception {
+        super();
     }
 
-    public double getOmega() {
-        return omega;
+    public Cylinder(double mass, double radius) throws Exception {
+        super();
+        angle = new SimpleDoubleProperty();
+        angAcc = new SimpleDoubleProperty();
+        angVel = new SimpleDoubleProperty();
+        setRadius(radius);
     }
 
-    public void setOmega(double omega) {
-        this.omega = omega;
+    public DoubleProperty angAccProperty() {
+        return angAcc;
     }
 
-    public double getTheta() {
-        return theta;
+
+    public double getAngAcc() {
+        return angAcc.get();
     }
 
-    public void setTheta(double theta) {
-        this.theta = theta;
-    }
-    @Override
-    public void resetObject(){
-        this.setAcceleration(0);
-        this.setVelocity(0);
-        this.setPosition(0);
-        this.setGamma(0);
-        this.setOmega(0);
-        this.setTheta(0);
+    public void setAngAcc(double angAcc) {
+        this.angAcc.set(angAcc);
     }
 
-    public Cylinder(double radius, double mass){
-        super(radius, mass);
-    }
 
-    @Override
-    public double friction(double appliedForce, double staticCoeffient, double kineticCoefficient) {
-
-        if (Math.abs(appliedForce) <= 3*this.normalForce()*staticCoeffient && this.getVelocity() == 0){
-            return -appliedForce/3;
-        } else if (Math.abs(appliedForce) > 3*this.normalForce()*staticCoeffient && this.getVelocity() == 0) {
-            if (appliedForce > 0){
-                return -this.normalForce()*kineticCoefficient;
-            } else {
-                return this.normalForce()*kineticCoefficient;
-            }
-        } else if (this.getVelocity() <0){
-            return this.normalForce()*kineticCoefficient;
-        } else {
-            return -this.normalForce()*kineticCoefficient;
+    public void updateAngAcc(Force force) {
+        if (force instanceof FrictionForce) {
+            setAngAcc(-force.getValue() / (0.5 * getMass() * getRadius() * getRadius()));
         }
-//        if (Math.abs(appliedForce) <= 3*this.normalForce()*staticCoeffient){
-//            return -appliedForce/3;
-//        } else {
-//            if (appliedForce > 0) {
-//                return -this.normalForce() * kineticCoefficient;
-//            } else {
-//                return this.normalForce() * kineticCoefficient;
-//            }
-//        }
-
     }
 
+    public DoubleProperty angVelProperty() {
+        return angVel;
+    }
 
-    @Override
-    public double calculateGamma(double friction, double mass, double radius) {
-        return -2*friction/(mass*radius);
+    public double getAngVel() {
+        return angVel.get();
+    }
+
+    public void setAngVel(double angVel) {
+        this.angVel.set(angVel);
+    }
+
+    public void updateAngVel(double t) {
+        setAngVel(getAngVel() + getAngAcc() * t);
+    }
+
+    public DoubleProperty angleProperty() {
+        return angle;
+    }
+
+    public double getAngle() {
+        return angle.get();
+    }
+
+    public void setAngle(double angle) {
+        this.angle.set(angle);
+    }
+
+    public void updateAngle(double oldAngVel, double t) {
+        setAngle(getAngle() + oldAngVel * t + 0.5 * getAngAcc() * t * t);
+    }
+
+    public DoubleProperty radiusProperty() {
+        return radius;
+    }
+
+    public double getRadius() {
+        return radius.get();
+    }
+
+    public void setRadius(double radius) throws Exception {
+        if (radius < MIN_RADIUS || radius > MAX_RADIUS) {
+            this.radius.set(MAX_RADIUS * 0.3);
+            throw new Exception("You should enter radius of object between " + MIN_RADIUS + " and " + MAX_RADIUS);
+        } else {
+            this.radius.set(radius);
+        }
+    }
+
+    public void applyForceRotate(Force force, double t) {
+        double oldAngVel = getAngVel();
+        updateAngAcc(force);
+        updateAngVel(t);
+        updateAngle(oldAngVel, t);
+    }
+
+    public void applyForce(Force netforce, Force fForce, double t) {
+        super.applyForce(netforce, fForce, t);
+        this.applyForceRotate(fForce, t);
     }
 }

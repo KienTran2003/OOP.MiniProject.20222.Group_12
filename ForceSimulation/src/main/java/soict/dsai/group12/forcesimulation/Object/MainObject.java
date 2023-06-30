@@ -1,68 +1,78 @@
 package soict.dsai.group12.forcesimulation.Object;
 
+import javafx.beans.property.*;
+import soict.dsai.group12.forcesimulation.Force.Force;
+import soict.dsai.group12.forcesimulation.Force.MotionVector;
+
 public abstract class MainObject {
-    private double side;
-    private double mass;
-    private double position = 0;
-    private double velocity = 0;
-    private double acceleration = 0;
+    public static final double DEFAULT_MASS = 50;
+    private DoubleProperty mass = new SimpleDoubleProperty(DEFAULT_MASS);
 
+    private MotionVector acc = new MotionVector(0.0);
+    private MotionVector vel = new MotionVector(0.0);
+    private DoubleProperty position = new SimpleDoubleProperty();
 
-
-    public MainObject(double side, double mass) {
-        this.side = side;
-        this.mass = mass;
-
-
+    public MainObject() {
     }
 
-    public double getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(double velocity) {
-        this.velocity = velocity;
-    }
-
-    public double getAcceleration() {
-        return acceleration;
-    }
-
-    public void setAcceleration(double acceleration) {
-        this.acceleration = acceleration;
-    }
-
-    public double getSide() {
-        return side;
-    }
-
-    public void setSide(double side) {
-        this.side = side;
-    }
-
-    public double getMass() {
+    public DoubleProperty massProperty() {
         return mass;
+    }
+    public double getMass() {
+        return mass.get();
     }
 
     public void setMass(double mass) {
-        this.mass = mass;
+        this.mass.set(mass);
     }
-    public double getPosition() {
+
+    public MotionVector getAcc() {
+        return acc;
+    }
+
+    public MotionVector getVel() {
+        return vel;
+    }
+
+    public void setAcc(MotionVector acc) {
+        this.acc = acc;
+    }
+
+    public void setVel(MotionVector vel) {
+        this.vel = vel;
+    }
+
+    public void updateAcc(Force force) {
+        double newAccValue = force.getValue() / getMass();
+        acc.setValue(newAccValue);
+    }
+
+    public void updateVel(double t) {
+        double newVelValue = vel.getValue() + acc.getValue() * t;
+        vel.setValue(newVelValue);
+        if (vel.getMagnitude() == 0) {
+            vel.setDirectionRight(acc.isDirectionRight());
+        }
+    }
+
+    public void applyForce(Force netForce, Force frictionForce, double t) {
+        updateAcc(netForce);
+        updateVel(t);
+        double oldPos = position.get();
+        double newPos = oldPos + vel.getValue() * t + 0.5 * acc.getValue() * t * t;
+        position.set(newPos);
+    }
+
+    public DoubleProperty posProperty() {
         return position;
     }
 
-    public void setPosition(double position) {
-        this.position = position;
-    }
-    public void resetObject(){
-        this.acceleration = 0;
-        this.velocity = 0;
-        this.position = 0;
-    }
-    public double normalForce() {
-        return 10 * mass;
+    public double getPosition() {
+        return position.get();
     }
 
-    public abstract double friction(double appliedForce, double staticCoeffient, double kineticCoefficient);
+    public void setPosition(double pos) {
+        this.position.set(pos);
+    }
 
 }
