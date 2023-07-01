@@ -4,9 +4,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 public class Surface {
+    //giả sử ma sát dùng là bê tông : 0.6 - 1.0
     public static final double MAX_STATIC_COEFFICIENT = 1.0;
-    private DoubleProperty staCoef = new SimpleDoubleProperty(MAX_STATIC_COEFFICIENT / 2);
-    private DoubleProperty kiCoef = new SimpleDoubleProperty(MAX_STATIC_COEFFICIENT / 4);
+    private DoubleProperty staCoef = new SimpleDoubleProperty(0.8);
+    private DoubleProperty kiCoef = new SimpleDoubleProperty(0.64);
     public static final double STEP_COEF = 0.001;
 
     public Surface() {
@@ -14,7 +15,7 @@ public class Surface {
 
     public Surface(double staCoef) {
         setStaCoef(staCoef);
-        setKiCoef(staCoef / 2);
+        setKiCoef(staCoef / 1.25);
     }
 
     public Surface(double staCoef, double kiCoef) {
@@ -51,10 +52,8 @@ public class Surface {
     public void setKiCoef(double kiCoef) {
         if (kiCoef < 0) {
             this.kiCoef.set(0);
-        } else if (kiCoef >= MAX_STATIC_COEFFICIENT) {
-            this.kiCoef.set(Math.max(0, getStaCoef() - STEP_COEF));
-        } else if (getStaCoef() <= kiCoef) {
-            this.kiCoef.set(Math.max(0, getStaCoef() - STEP_COEF));
+        } else if (kiCoef >= getStaCoef()) {
+            this.kiCoef.set(getStaCoef() - STEP_COEF);
         } else {
             this.kiCoef.set(kiCoef);
         }
