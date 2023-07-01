@@ -27,6 +27,11 @@ public class MotionVector {
         return value.get();
     }
 
+    /**
+     * cập nhật giá trị của vecto chuyển động
+     * cập nhật hướng dựa trên giá trị mới
+     * @param value
+     */
     public void setValue(double value) {
         this.value.set(value);
         updateValueDirection();
@@ -46,9 +51,28 @@ public class MotionVector {
         return direction.get();
     }
 
+    /**
+     * cập nhật hướng và giá trị
+     * gắn gía trị isRight cho biến direction
+     * updateDirectionValue() để cập nhật giá trị trên hướng mới
+     * @param isRight
+     */
     public void setDirectionRight(boolean isRight) {
         direction.set(isRight);
         updateDirectionValue();
+    }
+    /**
+     * được sử dụng để cập nhật giá trị của thuộc tính value dựa trên giá trị thuộc tính direction
+     * Nếu hướng hiện tại là true (đại diện cho hướng dương),
+     * thì giá trị của absValue được gán trực tiếp cho value.
+     * Ngược lại, nếu hướng hiện tại là false (đại diện cho hướng âm),
+     * thì giá trị của absValue được đảo dấu (-absValue)
+     * trước khi gán cho value.
+     */
+
+    private void updateDirectionValue() {
+        double absValue = Math.abs(getValue());
+        value.set(isDirectionRight() ? absValue : -absValue);
     }
     public DoubleProperty valueProperty() {
         return value;
@@ -58,15 +82,4 @@ public class MotionVector {
         return Math.abs(value.get());
     }
 
-
-    /**
-     * được sử dụng để cập nhật giá trị của thuộc tính value dựa trên giá trị thuộc tính direction
-     * Nếu direction có giá trị true (đúng), nghĩa là vector đang hướng sang phải,
-     * thì value sẽ được cập nhật với giá trị absValue (giá trị tuyệt đối của value).
-     */
-
-    private void updateDirectionValue() {
-        double absValue = Math.abs(getValue());
-        value.set(isDirectionRight() ? absValue : -absValue);
-    }
 }

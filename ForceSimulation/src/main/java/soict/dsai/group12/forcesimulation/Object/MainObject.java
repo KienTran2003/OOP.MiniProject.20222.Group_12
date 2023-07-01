@@ -42,11 +42,19 @@ public abstract class MainObject {
         this.vel = vel;
     }
 
+    /**
+     * cập nhật gia tốc
+     * @param force
+     */
     public void updateAcc(Force force) {
         double newAccValue = force.getValue() / getMass();
         acc.setValue(newAccValue);
     }
 
+    /**
+     * cập nhật vận tốc
+     * @param t
+     */
     public void updateVel(double t) {
         double newVelValue = vel.getValue() + acc.getValue() * t;
         vel.setValue(newVelValue);
@@ -54,7 +62,7 @@ public abstract class MainObject {
             vel.setDirectionRight(acc.isDirectionRight());
         }
     }
-
+    //lực áp dụng trong thời gian t, cập nhật a,v,x
     public void applyForce(Force netForce, Force frictionForce, double t) {
         updateAcc(netForce);
         updateVel(t);

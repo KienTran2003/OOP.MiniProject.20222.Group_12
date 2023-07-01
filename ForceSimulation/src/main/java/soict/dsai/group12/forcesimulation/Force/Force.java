@@ -12,8 +12,8 @@ public class Force extends MotionVector{
 
     /**
      * sum of two force
-     * @param f1
-     * @param f2
+     * @param f1 : AppliedForce
+     * @param f2 : Friction Force
      * @return
      */
     public static Force sumTwoForce(Force f1, Force f2) {
