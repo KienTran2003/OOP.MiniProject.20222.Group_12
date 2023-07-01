@@ -5,6 +5,4 @@ module soict.dsai.group12.forcesimulation {
                             
     opens soict.dsai.group12.forcesimulation to javafx.fxml;
     exports soict.dsai.group12.forcesimulation;
-    exports soict.dsai.group12.forcesimulation.Object;
-    opens soict.dsai.group12.forcesimulation.Object to javafx.fxml;
 }
