@@ -12,8 +12,8 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import soict.dsai.group12.forcesimulation.Object.Cylinder;
-import soict.dsai.group12.forcesimulation.Object.MainObject;
+import soict.dsai.group12.forcesimulation.Model.Object.Cylinder;
+import soict.dsai.group12.forcesimulation.Model.Object.MainObject;
 
 public class SliderController implements Initializable {
 

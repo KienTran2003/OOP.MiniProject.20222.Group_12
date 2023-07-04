@@ -2,8 +2,8 @@ package soict.dsai.group12.forcesimulation.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import soict.dsai.group12.forcesimulation.Object.Cylinder;
-import soict.dsai.group12.forcesimulation.Object.MainObject;
+import soict.dsai.group12.forcesimulation.Model.Object.Cylinder;
+import soict.dsai.group12.forcesimulation.Model.Object.MainObject;
 
 public class InfoController {
     private MainObject mainObject;

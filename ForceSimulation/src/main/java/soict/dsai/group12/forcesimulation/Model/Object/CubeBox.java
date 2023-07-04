@@ -1,4 +1,4 @@
-package soict.dsai.group12.forcesimulation.Object;
+package soict.dsai.group12.forcesimulation.Model.Object;
 
 public class CubeBox extends MainObject{
 

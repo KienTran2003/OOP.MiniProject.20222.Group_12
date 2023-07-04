@@ -15,9 +15,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
-import soict.dsai.group12.forcesimulation.Object.CubeBox;
-import soict.dsai.group12.forcesimulation.Object.Cylinder;
-import soict.dsai.group12.forcesimulation.Object.MainObject;
+import soict.dsai.group12.forcesimulation.Model.Object.CubeBox;
+import soict.dsai.group12.forcesimulation.Model.Object.Cylinder;
+import soict.dsai.group12.forcesimulation.Model.Surface.Surface;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,14 +28,13 @@ public class SceneController implements Initializable {
     private Duration originalDuration = Duration.millis(10);
     private CubeBox cubeBox;
     private Cylinder cylinder;
-    private double staticCoefficient, kineticCoefficient;
-    private MainObject mainObject;
     private Rotate rotation = new Rotate();
     private SliderController sliderController;
     private InfoController infoController;
     private CheckboxController checkboxController;
     private BackgroundController backgroundController;
     private ForceController forceController;
+    private Surface surface;
 
 
 
@@ -92,8 +91,9 @@ public class SceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        staticCoefficient = 0;
-        kineticCoefficient = 0;
+//        staticCoefficient = 0;
+//        kineticCoefficient = 0;
+        surface = new Surface(0,0);
         cubeBox = new CubeBox(20, 20);
         cylinder = new Cylinder(5, 20);
         rotation.setPivotX(circle.getCenterX()); // Set pivot point at the center of the circle
@@ -105,91 +105,41 @@ public class SceneController implements Initializable {
 
         //Load road
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("road.fxml"));
-
-        roadController = new RoadController();
-        loader.setController(roadController);
-        try {
-            roadPane.getChildren().add(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        loadRoadPane();
 
         //Load vector pane
 
-        FXMLLoader loaderVector = new FXMLLoader(getClass().getResource("force.fxml"));
-        forceController = new ForceController();
-        loaderVector.setController(forceController);
-        try {
-            vectorPane.getChildren().add(loaderVector.load());
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        loadVectorPane();
 
         // Load check box pane
-        FXMLLoader loaderCheckBox = new FXMLLoader(getClass().getResource("checkbox.fxml"));
-        checkboxController = new CheckboxController();
-        loaderCheckBox.setController(checkboxController);
-        try {
-            checkboxPane.getChildren().add(loaderCheckBox.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        loadCheckBoxPane();
         //Load slider
-        FXMLLoader loaderSlider = new FXMLLoader(getClass().getResource("slider.fxml"));
-
-        sliderController = new SliderController(cylinder, staticCoefficient, kineticCoefficient, forceController, checkboxController);
-
-        loaderSlider.setController(sliderController);
-
-        try {
-            sliderPane.getChildren().add(loaderSlider.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        loadSliderPane();
 
         // Load information slider
-        FXMLLoader loaderInfo = new FXMLLoader(getClass().getResource("info.fxml"));
-
-        infoController = new InfoController(sliderController.getMainObject());
-
-        loaderInfo.setController(infoController);
-
-        try {
-            infoPane.getChildren().add(loaderInfo.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        loadInfoPane();
 
 
         //Load background pane
-        FXMLLoader loaderBackground = new FXMLLoader(getClass().getResource("background.fxml"));
-        backgroundController = new BackgroundController();
-        loaderBackground.setController(backgroundController);
-        try {
-            backgroundPane.getChildren().add(loaderBackground.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        loadBackgroundPane();
 
 
         //Set funtion on slider to change friction coefficient
         staticSlider.setOnMouseDragged(e -> {
-            this.staticCoefficient = staticSlider.getValue();
-            sliderController.setStaticCoefficient(staticCoefficient);
+            surface.setStaticCoefficient(staticSlider.getValue());
+            sliderController.setStaticCoefficient(surface.getStaticCoefficient());
         });
         staticSlider.setOnMouseClicked(e -> {
-            this.staticCoefficient = staticSlider.getValue();
-            sliderController.setStaticCoefficient(staticCoefficient);
+            surface.setStaticCoefficient(staticSlider.getValue());
+            sliderController.setStaticCoefficient(surface.getStaticCoefficient());
         });
         kineticSlider.setOnMouseDragged(e -> {
-            this.kineticCoefficient = kineticSlider.getValue();
-            sliderController.setKineticCoefficient(kineticCoefficient);
+            surface.setKineticCoefficient(kineticSlider.getValue());
+            sliderController.setKineticCoefficient(surface.getKineticCoefficient());
         });
         kineticSlider.setOnMouseClicked(e -> {
-            this.kineticCoefficient = kineticSlider.getValue();
-            sliderController.setKineticCoefficient(kineticCoefficient);
+            surface.setKineticCoefficient(kineticSlider.getValue());
+            sliderController.setKineticCoefficient(surface.getKineticCoefficient());
         });
 
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -206,7 +156,6 @@ public class SceneController implements Initializable {
             timeline.play();
             btnStop.setText("Stop");
         }
-//        timeline.stop();
 
     }
 
@@ -215,8 +164,8 @@ public class SceneController implements Initializable {
         sliderController.getMainObject().resetObject();
         roadController.restartRoad();
         btnStop.setText("Stop");
-        this.staticCoefficient = 0;
-        this.kineticCoefficient = 0;
+        surface.setStaticCoefficient(0);
+        surface.setKineticCoefficient(0);
         sliderController.setStaticCoefficient(0);
         sliderController.setKineticCoefficient(0);
         kineticSlider.setValue(0);
@@ -393,6 +342,74 @@ public class SceneController implements Initializable {
             }
 
         });
+    }
+    public void loadRoadPane(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("road.fxml"));
+
+        roadController = new RoadController();
+        loader.setController(roadController);
+        try {
+            roadPane.getChildren().add(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void loadVectorPane(){
+        FXMLLoader loaderVector = new FXMLLoader(getClass().getResource("force.fxml"));
+        forceController = new ForceController();
+        loaderVector.setController(forceController);
+        try {
+            vectorPane.getChildren().add(loaderVector.load());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void loadCheckBoxPane(){
+        FXMLLoader loaderCheckBox = new FXMLLoader(getClass().getResource("checkbox.fxml"));
+        checkboxController = new CheckboxController();
+        loaderCheckBox.setController(checkboxController);
+        try {
+            checkboxPane.getChildren().add(loaderCheckBox.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void loadSliderPane(){
+        FXMLLoader loaderSlider = new FXMLLoader(getClass().getResource("slider.fxml"));
+
+        sliderController = new SliderController(cylinder, surface.getStaticCoefficient(), surface.getKineticCoefficient(), forceController, checkboxController);
+
+        loaderSlider.setController(sliderController);
+
+        try {
+            sliderPane.getChildren().add(loaderSlider.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void loadInfoPane(){
+        FXMLLoader loaderInfo = new FXMLLoader(getClass().getResource("info.fxml"));
+
+        infoController = new InfoController(sliderController.getMainObject());
+
+        loaderInfo.setController(infoController);
+
+        try {
+            infoPane.getChildren().add(loaderInfo.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void loadBackgroundPane(){
+        FXMLLoader loaderBackground = new FXMLLoader(getClass().getResource("background.fxml"));
+        backgroundController = new BackgroundController();
+        loaderBackground.setController(backgroundController);
+        try {
+            backgroundPane.getChildren().add(loaderBackground.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
