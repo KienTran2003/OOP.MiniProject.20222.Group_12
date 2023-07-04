@@ -70,6 +70,21 @@ public class Cylinder extends MainObject implements Rotable{
 
     }
 
+    //Over loading
+    public void updateAttribute(double acceleration, double newGamma){
+        updateAttribute(acceleration);
+        this.setGamma(newGamma);
+        if (this.getOmega()*(this.getOmega() + 0.01*newGamma) < 0){
+            this.setOmega(0);
+        } else {
+           this.setOmega(this.getOmega() + 0.01*newGamma);
+        }
+        if (this.getTheta()*(this.getTheta() + 0.01*this.getOmega()) < 0){
+            this.setTheta(0);
+        } else {
+            this.setTheta(this.getTheta() + 0.01* this.getOmega());
+        }
+    }
 
     @Override
     public double calculateGamma(double friction, double mass, double radius) {

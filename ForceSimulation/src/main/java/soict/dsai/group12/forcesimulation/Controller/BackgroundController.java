@@ -30,7 +30,7 @@ public class BackgroundController implements Initializable {
             if (image.getLayoutX()-velo < -1500){
                 image.setLayoutX(1500);
             } else if (image.getLayoutX()-velo > 1500) {
-                image.setLayoutX(1500);
+                image.setLayoutX(-1500);
             } else {
                 image.setLayoutX(image.getLayoutX()-velo);
             }

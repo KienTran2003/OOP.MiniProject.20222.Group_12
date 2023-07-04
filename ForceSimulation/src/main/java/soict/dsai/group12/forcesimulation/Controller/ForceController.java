@@ -28,7 +28,6 @@ public class ForceController implements Initializable {
         appForceLabel.setVisible(isShow && isShowValue);
         if (applyForce > 0){
             posiAppForce.setFitWidth(applyForce/2);
-//            appForceLabel.setText(String.format("%.0f", applyForce));
             appForceLabel.setLayoutX(posiAppForce.getLayoutX() + posiAppForce.getFitWidth()/2);
 
             posiAppForce.setVisible(isShow);
@@ -39,7 +38,6 @@ public class ForceController implements Initializable {
             negaAppForce.setFitWidth(-applyForce/2);
 
             appForceLabel.setLayoutX(negaAppForce.getLayoutX() + negaAppForce.getFitWidth()/2);
-//            appForceLabel.setVisible(isShow);
             posiAppForce.setVisible(false);
             negaAppForce.setVisible(isShow);
 
@@ -89,5 +87,10 @@ public class ForceController implements Initializable {
             posiSumForce.setVisible(false);
             negaSumForce.setVisible(false);
         }
+    }
+    public void updateAllForce(double sliderValue, double friction, boolean isShowForce,boolean isShowSum, boolean isShowValue){
+        this.updateAppForceVector(sliderValue, isShowForce, isShowValue);
+        this.updateFrictionVector(friction, isShowForce, isShowValue);
+        this.updateSumForce(sliderValue,friction, isShowSum, isShowValue);
     }
 }

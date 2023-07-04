@@ -17,6 +17,7 @@ import soict.dsai.group12.forcesimulation.Object.MainObject;
 
 public class SliderController implements Initializable {
 
+    private final int MAX_SPEED = 50;
     private MainObject mainObject;
     private ForceController forceController;
     private CheckboxController checkboxController;
@@ -63,38 +64,44 @@ public class SliderController implements Initializable {
 
         slider.setOnMouseDragged(e -> {
 
+            if (mainObject.getVelocity() > 50 && slider.getValue() > 0){
+                this.slider.setValue(0);
 
-            if (sliderTimeline != null){sliderTimeline.stop();}
-            Duration newDuration = Duration.millis(10); // Set the new duration
-            KeyFrame newKeyFrame = new KeyFrame(newDuration,event -> {
+            } else if (mainObject.getVelocity() < -50 && slider.getValue() < 0) {
+                this.slider.setValue(0);
+            } else {
+                if (sliderTimeline != null){sliderTimeline.stop();}
+                Duration newDuration = Duration.millis(10);
+                KeyFrame newKeyFrame = new KeyFrame(newDuration,event -> {
 
-                update();
-            });;
+                    update();
+                });;
 
-            forceController.updateAppForceVector(slider.getValue(), checkboxController.getForceBox(), checkboxController.getValueBox());
-            forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox(), checkboxController.getValueBox());
+                forceController.updateAllForce(slider.getValue(), mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getForceBox(),checkboxController.getSumBox(), checkboxController.getValueBox());
 
-            sliderTimeline = new Timeline(newKeyFrame);
-            sliderTimeline.setCycleCount(Animation.INDEFINITE);
-            sliderTimeline.play();
-            String formattedValue = String.format("%.0f", slider.getValue());
-            forceLabel.setText(formattedValue + " newtons");
+                sliderTimeline = new Timeline(newKeyFrame);
+                sliderTimeline.setCycleCount(Animation.INDEFINITE);
+                sliderTimeline.play();
+                String formattedValue = String.format("%.0f", slider.getValue());
+                forceLabel.setText(formattedValue + " newtons");
+            }
+
+
         });
         slider.setOnMouseReleased(e -> {
             slider.setValue(0);
             String formattedValue = String.format("%.0f", slider.getValue());
             forceLabel.setText(formattedValue + " newtons");
 
-            forceController.updateAppForceVector(slider.getValue(), checkboxController.getForceBox(), checkboxController.getValueBox());
-            forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox(), checkboxController.getValueBox() );
+            forceController.updateAllForce(slider.getValue(), mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getForceBox(),checkboxController.getSumBox(), checkboxController.getValueBox());
 
 
 
             if (sliderTimeline != null){sliderTimeline.stop();}
-            Duration newDuration = Duration.millis(10); // Set the new duration
+            Duration newDuration = Duration.millis(10);
             KeyFrame newKeyFrame = new KeyFrame(newDuration, event -> {
                 update();
-            });;
+            });
             sliderTimeline = new Timeline(newKeyFrame);
             sliderTimeline.setCycleCount(Animation.INDEFINITE);
             sliderTimeline.play();
@@ -103,36 +110,26 @@ public class SliderController implements Initializable {
 
     void update(){
         double appliedForce = slider.getValue();
-        forceController.updateFrictionVector(mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getForceBox(), checkboxController.getValueBox());
-        forceController.updateSumForce(slider.getValue(),mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient), checkboxController.getSumBox(), checkboxController.getValueBox());
+        double friction = mainObject.friction(slider.getValue(), staticCoefficient, kineticCoefficient);
         double acceleration = (appliedForce + mainObject.friction(appliedForce, staticCoefficient, kineticCoefficient))/mainObject.getMass();
-        mainObject.setAcceleration(acceleration);
-        if (mainObject.getVelocity()*(mainObject.getVelocity() + 0.01 * acceleration) < 0 ){
-            mainObject.setVelocity(0);
-        } else {
-            mainObject.setVelocity(mainObject.getVelocity() + 0.01 * acceleration);
-        }
-        mainObject.setPosition(mainObject.getPosition() + 0.01*mainObject.getVelocity());
+        forceController.updateAllForce(slider.getValue(),friction , checkboxController.getForceBox(),checkboxController.getSumBox(), checkboxController.getValueBox());
+
         if (mainObject instanceof Cylinder){
-            double newGamma = ((Cylinder) mainObject).calculateGamma(mainObject.friction(appliedForce, staticCoefficient, kineticCoefficient), mainObject.getMass(), mainObject.getSide());
-            ((Cylinder) mainObject).setGamma(newGamma);
-            if (((Cylinder) mainObject).getOmega()*(((Cylinder) mainObject).getOmega() + 0.01*newGamma) < 0){
-                ((Cylinder) mainObject).setOmega(0);
-            } else {
-                ((Cylinder) mainObject).setOmega(((Cylinder) mainObject).getOmega() + 0.01*newGamma);
-            }
-            if (((Cylinder) mainObject).getTheta()*(((Cylinder) mainObject).getTheta() + 0.01*((Cylinder) mainObject).getOmega()) < 0){
-                ((Cylinder) mainObject).setTheta(0);
-            } else {
-                ((Cylinder) mainObject).setTheta(((Cylinder) mainObject).getTheta() + 0.01* ((Cylinder) mainObject).getOmega());
-            }
-
-
+            double gamma = ((Cylinder) mainObject).calculateGamma(friction, mainObject.getMass(), mainObject.getSide());
+            ((Cylinder) mainObject).updateAttribute(acceleration, gamma);
+        } else {
+            mainObject.updateAttribute(acceleration);
         }
-
     }
 
     void setDisableSlider(boolean bool){
-        slider.setDisable(bool);
+        this.slider.setDisable(bool);
+    }
+    void updateLimitVelo(){
+        if (mainObject.getVelocity() > MAX_SPEED && slider.getValue() > 0){
+            this.slider.setValue(0);
+        } else if (mainObject.getVelocity() < -MAX_SPEED && slider.getValue() < 0) {
+            this.slider.setValue(0);
+        }
     }
 }

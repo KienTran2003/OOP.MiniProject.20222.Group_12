@@ -79,7 +79,7 @@ public class SceneController implements Initializable {
         infoController.showVelo(checkboxController.getVeloBox());
 
         backgroundController.move(sliderController.getMainObject().getVelocity());
-
+        sliderController.updateLimitVelo();
 
 
     });
@@ -102,16 +102,7 @@ public class SceneController implements Initializable {
         circle.getTransforms().add(rotation);
 
         recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cube_image.png")));
-//        btnStop.getStyleClass().add("button");
-//        FileInputStream input;
-//        try {
-//            input = new FileInputStream("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\btn.jpg");
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//        Image image = new Image(input);
-//        ImageView imageView = new ImageView(image);
-//        btnStop.setGraphic(imageView);
+
         //Load road
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("road.fxml"));
