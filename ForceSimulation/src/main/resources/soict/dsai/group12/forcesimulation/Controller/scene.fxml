@@ -16,8 +16,8 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d2d3d4" height="200.0" layoutX="559.0" layoutY="640.0" stroke="BLACK" strokeType="INSIDE" width="501.0" />
       <AnchorPane fx:id="roadPane" disable="true" layoutY="500.0" prefHeight="45.0" prefWidth="1500.0" />
       <AnchorPane fx:id="sliderPane" layoutX="576.0" layoutY="666.0" prefHeight="145.0" prefWidth="461.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ddffc4" height="263.0" layoutX="35.0" layoutY="607.0" stroke="BLACK" strokeType="INSIDE" width="493.0" />
-      <Circle fx:id="circle" fill="#f8f8f8" layoutX="160.0" layoutY="740.0" onMouseClicked="#setCylinder" radius="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="15.0" style="-fx-stroke-dash-array: 50;" />
+      <Rectangle fx:id="locationObj" arcHeight="5.0" arcWidth="5.0" fill="#ddffc4" height="263.0" layoutX="35.0" layoutY="607.0" stroke="BLACK" strokeType="INSIDE" width="493.0" />
+      <Circle fx:id="circle" fill="#f8f8f8" layoutX="160.0" layoutY="740.0" onMouseClicked="#setCylinder" radius="100.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" style="-fx-stroke-dash-array: 50;" />
       <Rectangle fx:id="recBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutX="300.0" layoutY="640.0" onMouseClicked="#setBox" stroke="BLACK" strokeType="INSIDE" width="200.0" />
       <TextField fx:id="textMass" alignment="CENTER" layoutX="559.0" layoutY="430.0" prefHeight="33.0" prefWidth="81.0" visible="false">
          <font>

@@ -25,6 +25,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SceneController implements Initializable {
+    private final int MAX_MASS = 50;
+    private final int MAX_SIDE = 100;
     private Duration originalDuration = Duration.millis(10);
     private CubeBox cubeBox;
     private Cylinder cylinder;
@@ -58,7 +60,7 @@ public class SceneController implements Initializable {
     @FXML
     Circle circle;
     @FXML
-    Rectangle recBox;
+    Rectangle recBox, locationObj;
     @FXML
     TextField textMass;
     @FXML
@@ -91,8 +93,6 @@ public class SceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        staticCoefficient = 0;
-//        kineticCoefficient = 0;
         surface = new Surface(0,0);
         cubeBox = new CubeBox(20, 20);
         cylinder = new Cylinder(5, 20);
@@ -101,8 +101,10 @@ public class SceneController implements Initializable {
         rotation.setAngle(0); // Set rotation speed (in degrees per frame)
         circle.getTransforms().add(rotation);
 
-        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cube_image.png")));
-
+//        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cube_image.png")));
+        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cube.png")));
+        circle.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cylinder.png")));
+//        locationObj.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\locationObj.png")));
         //Load road
 
         loadRoadPane();
@@ -127,19 +129,15 @@ public class SceneController implements Initializable {
         //Set funtion on slider to change friction coefficient
         staticSlider.setOnMouseDragged(e -> {
             surface.setStaticCoefficient(staticSlider.getValue());
-            sliderController.setStaticCoefficient(surface.getStaticCoefficient());
         });
         staticSlider.setOnMouseClicked(e -> {
             surface.setStaticCoefficient(staticSlider.getValue());
-            sliderController.setStaticCoefficient(surface.getStaticCoefficient());
         });
         kineticSlider.setOnMouseDragged(e -> {
             surface.setKineticCoefficient(kineticSlider.getValue());
-            sliderController.setKineticCoefficient(surface.getKineticCoefficient());
         });
         kineticSlider.setOnMouseClicked(e -> {
             surface.setKineticCoefficient(kineticSlider.getValue());
-            sliderController.setKineticCoefficient(surface.getKineticCoefficient());
         });
 
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -166,8 +164,6 @@ public class SceneController implements Initializable {
         btnStop.setText("Stop");
         surface.setStaticCoefficient(0);
         surface.setKineticCoefficient(0);
-        sliderController.setStaticCoefficient(0);
-        sliderController.setKineticCoefficient(0);
         kineticSlider.setValue(0);
         staticSlider.setValue(0);
         timeline.play();
@@ -244,19 +240,42 @@ public class SceneController implements Initializable {
                 try {
                     double mass = Double.parseDouble(massInput);
                     double radius = Double.parseDouble(radiusInput);
-                    cylinder.setMass(mass);
-                    cylinder.setSide(radius);
+                    if (mass>0 && mass < MAX_MASS && radius > 0 && radius<MAX_SIDE){       //Check valid value of mass and side length
+                        System.out.println("true");
+                        cylinder.setMass(mass);
+                        cylinder.setSide(radius);
 
-                    if (recBox.getLayoutX() == 500) {
-                        recBox.setLayoutX(300);
-                        recBox.setLayoutY(640);
+                        if (recBox.getLayoutX() == 500) {
+                            recBox.setLayoutX(300);
+                            recBox.setLayoutY(640);
+                        }
+                        circle.setLayoutX(600);
+                        circle.setLayoutY(400);
+                        cylinder.resetObject();
+                        sliderController.setMainObject(cylinder);
+                        infoController.setMainObject(cylinder);
+                        sliderController.setDisableSlider(false);
+                    } else {
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Invalid Input");
+                        errorAlert.setHeaderText(null);
+                        errorAlert.setContentText("Invalid mass or radius input. Please enter numeric values.");
+                        errorAlert.showAndWait();
+                        cylinderInput();
                     }
-                    circle.setLayoutX(600);
-                    circle.setLayoutY(400);
-                    cylinder.resetObject();
-                    sliderController.setMainObject(cylinder);
-                    infoController.setMainObject(cylinder);
-                    sliderController.setDisableSlider(false);
+//                    cylinder.setMass(mass);
+//                    cylinder.setSide(radius);
+//
+//                    if (recBox.getLayoutX() == 500) {
+//                        recBox.setLayoutX(300);
+//                        recBox.setLayoutY(640);
+//                    }
+//                    circle.setLayoutX(600);
+//                    circle.setLayoutY(400);
+//                    cylinder.resetObject();
+//                    sliderController.setMainObject(cylinder);
+//                    infoController.setMainObject(cylinder);
+//                    sliderController.setDisableSlider(false);
 
 
 
@@ -267,7 +286,7 @@ public class SceneController implements Initializable {
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setTitle("Invalid Input");
                     errorAlert.setHeaderText(null);
-                    errorAlert.setContentText("Invalid mass or radius input. Please enter numeric values.");
+                    errorAlert.setContentText("Invalid mass or radius input. Please enter numeric values that lie in correct ranges.");
                     errorAlert.showAndWait();
                     cylinderInput();
                 }
@@ -298,7 +317,7 @@ public class SceneController implements Initializable {
 
         // Create an alert dialog
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Cubic Box Property");
+        alert.setTitle("Cube Box Property");
         alert.setHeaderText(null);
         alert.getDialogPane().setContent(gridPane);
 
@@ -312,20 +331,43 @@ public class SceneController implements Initializable {
                 String sideInput = sideTextField.getText();
                 try {
                     double mass = Double.parseDouble(massInput);
-                    double radius = Double.parseDouble(sideInput);
-                    cubeBox.setMass(mass);
-                    cubeBox.setSide(radius);
+                    double side = Double.parseDouble(sideInput);
 
-                    if (circle.getLayoutX() == 600) {
-                        circle.setLayoutX(160);
-                        circle.setLayoutY(740);
+                    if (mass > 0 && mass <= MAX_MASS && side>0 && side <MAX_SIDE){
+                        cubeBox.setMass(mass);
+                        cubeBox.setSide(side);
+
+                        if (circle.getLayoutX() == 600) {
+                            circle.setLayoutX(160);
+                            circle.setLayoutY(740);
+                        }
+                        recBox.setLayoutX(500);
+                        recBox.setLayoutY(300);
+                        cubeBox.resetObject();
+                        sliderController.setMainObject(cubeBox);
+                        infoController.setMainObject(cubeBox);
+                        sliderController.setDisableSlider(false);
+                    } else {
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Invalid Input");
+                        errorAlert.setHeaderText(null);
+                        errorAlert.setContentText("Invalid mass or side length input. Please enter numeric values that lie in correct range.");
+                        errorAlert.showAndWait();
+                        cubicBoxInput();;
                     }
-                    recBox.setLayoutX(500);
-                    recBox.setLayoutY(300);
-                    cubeBox.resetObject();
-                    sliderController.setMainObject(cubeBox);
-                    infoController.setMainObject(cubeBox);
-                    sliderController.setDisableSlider(false);
+//                    cubeBox.setMass(mass);
+//                    cubeBox.setSide(radius);
+//
+//                    if (circle.getLayoutX() == 600) {
+//                        circle.setLayoutX(160);
+//                        circle.setLayoutY(740);
+//                    }
+//                    recBox.setLayoutX(500);
+//                    recBox.setLayoutY(300);
+//                    cubeBox.resetObject();
+//                    sliderController.setMainObject(cubeBox);
+//                    infoController.setMainObject(cubeBox);
+//                    sliderController.setDisableSlider(false);
 
 
 
@@ -337,7 +379,7 @@ public class SceneController implements Initializable {
                     errorAlert.setHeaderText(null);
                     errorAlert.setContentText("Invalid mass or side length input. Please enter numeric values.");
                     errorAlert.showAndWait();
-                    cubicBoxInput();;
+                    cubicBoxInput();
                 }
             }
 
@@ -378,7 +420,7 @@ public class SceneController implements Initializable {
     public void loadSliderPane(){
         FXMLLoader loaderSlider = new FXMLLoader(getClass().getResource("slider.fxml"));
 
-        sliderController = new SliderController(cylinder, surface.getStaticCoefficient(), surface.getKineticCoefficient(), forceController, checkboxController);
+        sliderController = new SliderController(cylinder,surface, forceController, checkboxController);
 
         loaderSlider.setController(sliderController);
 
