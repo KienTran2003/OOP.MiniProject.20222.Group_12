@@ -23,6 +23,7 @@ public class SliderController implements Initializable {
     private ForceController forceController;
     private CheckboxController checkboxController;
     private Surface surface;
+
     private Timeline sliderTimeline;
 
 
@@ -48,9 +49,8 @@ public class SliderController implements Initializable {
     public MainObject getMainObject() {
         return mainObject;
     }
-//    public Slider getSlider(){
-//        return slider;
-//    }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -71,7 +71,7 @@ public class SliderController implements Initializable {
                     update();
                 });
 
-                forceController.updateAllForce(slider.getValue(), mainObject.friction(slider.getValue(), surface.getStaticCoefficient(), surface.getKineticCoefficient()), checkboxController.getForceBox(),checkboxController.getSumBox(), checkboxController.getValueBox());
+                forceController.updateAllForce(slider.getValue(), mainObject.calculateFriction(slider.getValue(), surface.getStaticCoefficient(), surface.getKineticCoefficient()), checkboxController.getForceBox(),checkboxController.getSumBox(), checkboxController.getValueBox());
 
                 sliderTimeline = new Timeline(newKeyFrame);
                 sliderTimeline.setCycleCount(Animation.INDEFINITE);
@@ -87,7 +87,7 @@ public class SliderController implements Initializable {
             String formattedValue = String.format("%.0f", slider.getValue());
             forceLabel.setText(formattedValue + " newtons");
 
-            forceController.updateAllForce(slider.getValue(), mainObject.friction(slider.getValue(), surface.getStaticCoefficient(), surface.getKineticCoefficient()), checkboxController.getForceBox(),checkboxController.getSumBox(), checkboxController.getValueBox());
+            forceController.updateAllForce(slider.getValue(), mainObject.calculateFriction(slider.getValue(), surface.getStaticCoefficient(), surface.getKineticCoefficient()), checkboxController.getForceBox(),checkboxController.getSumBox(), checkboxController.getValueBox());
 
 
 
@@ -104,8 +104,10 @@ public class SliderController implements Initializable {
 
     void update(){
         double appliedForce = slider.getValue();
-        double friction = mainObject.friction(slider.getValue(), surface.getStaticCoefficient(), surface.getKineticCoefficient());
-        double acceleration = (appliedForce + mainObject.friction(appliedForce, surface.getStaticCoefficient(), surface.getKineticCoefficient()))/mainObject.getMass();
+        double friction = mainObject.calculateFriction(slider.getValue(), surface.getStaticCoefficient(), surface.getKineticCoefficient());
+        double acceleration = mainObject.calculateAcceleration(appliedForce, friction);
+
+
         forceController.updateAllForce(slider.getValue(),friction , checkboxController.getForceBox(),checkboxController.getSumBox(), checkboxController.getValueBox());
 
         if (mainObject instanceof Cylinder){

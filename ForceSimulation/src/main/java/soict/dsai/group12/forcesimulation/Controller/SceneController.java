@@ -19,6 +19,7 @@ import soict.dsai.group12.forcesimulation.Model.Object.CubeBox;
 import soict.dsai.group12.forcesimulation.Model.Object.Cylinder;
 import soict.dsai.group12.forcesimulation.Model.Surface.Surface;
 
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -71,6 +72,7 @@ public class SceneController implements Initializable {
 
 
         rotation.setAngle(rotation.getAngle() + cylinder.getVelocity());
+//        rotation.setAngle(rotation.getAngle() + cylinder.getOmega());
         textMass.setText(sliderController.getMainObject().getMass() + " Kg");
         if (recBox.getLayoutX() == 500 || circle.getLayoutX() == 600){
             textMass.setVisible(checkboxController.getMassBox());
@@ -103,8 +105,12 @@ public class SceneController implements Initializable {
 
 //        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cube_image.png")));
         recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cube.png")));
+//        recBox.setFill(new ImagePattern(new Image("https://github.com/KienTran2003/OOP.MiniProject.20222.Group_12/blob/02b8b5c9a7b94990ae777d1458cb644ce4ffc1a9/ForceSimulation/src/main/resources/soict/dsai/group12/forcesimulation/Image/cube.png")));
+//        Image img = new Image("/ForceSimulation/src/main/resources/soict/dsai/group12/forcesimulation/Image/cube.png");
+//        recBox.setFill(new ImagePattern(new Image("cube.png")));
         circle.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cylinder.png")));
 //        locationObj.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\locationObj.png")));
+
         //Load road
 
         loadRoadPane();
@@ -120,7 +126,6 @@ public class SceneController implements Initializable {
 
         // Load information slider
         loadInfoPane();
-
 
         //Load background pane
         loadBackgroundPane();
@@ -442,6 +447,7 @@ public class SceneController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
     public void loadBackgroundPane(){
         FXMLLoader loaderBackground = new FXMLLoader(getClass().getResource("background.fxml"));
@@ -453,6 +459,7 @@ public class SceneController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
 
 
 }

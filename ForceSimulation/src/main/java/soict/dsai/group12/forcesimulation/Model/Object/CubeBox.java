@@ -10,7 +10,7 @@ public class CubeBox extends MainObject{
     }
 
 
-    public double friction(double appliedForce, double staticCoeffient, double kineticCoefficient){
+    public double calculateFriction(double appliedForce, double staticCoeffient, double kineticCoefficient){
         if (Math.abs(appliedForce) <= this.normalForce()*staticCoeffient && this.getVelocity() == 0){
             return -appliedForce;
         } else if (Math.abs(appliedForce) > this.normalForce()*staticCoeffient && this.getVelocity() == 0) {

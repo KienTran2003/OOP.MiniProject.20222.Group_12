@@ -43,7 +43,7 @@ public class Cylinder extends MainObject implements Rotable{
     }
 
     @Override
-    public double friction(double appliedForce, double staticCoeffient, double kineticCoefficient) {
+    public double calculateFriction(double appliedForce, double staticCoeffient, double kineticCoefficient) {
 
         if (Math.abs(appliedForce) <= 3*this.normalForce()*staticCoeffient && this.getVelocity() == 0){
             return -appliedForce/3;

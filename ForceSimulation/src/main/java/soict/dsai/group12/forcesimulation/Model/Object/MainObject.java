@@ -1,5 +1,7 @@
 package soict.dsai.group12.forcesimulation.Model.Object;
 
+import soict.dsai.group12.forcesimulation.Model.Surface.Surface;
+
 public abstract class MainObject {
     private double side;
     private double mass;
@@ -77,6 +79,9 @@ public abstract class MainObject {
 
     }
 
-    public abstract double friction(double appliedForce, double staticCoeffient, double kineticCoefficient);
+    public double calculateAcceleration(double appliedForce, double friction){
+        return (appliedForce + friction)/this.getMass();
+    }
+    public abstract double calculateFriction(double appliedForce, double staticCoeffient, double kineticCoefficient);
 
 }
