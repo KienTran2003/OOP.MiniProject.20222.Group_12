@@ -77,8 +77,8 @@ public class Cylinder extends MainObject implements RotatingObject{
             acceleration = appliedForce / mass.get();
             gamma.set(0);
         } else {
-            acceleration = angularAcceleration * radius.get();
-            gamma.set(angularAcceleration);
+            acceleration = -angularAcceleration * radius.get();
+            gamma.set(-angularAcceleration);
         }
         return acceleration;
     }
@@ -118,7 +118,7 @@ public class Cylinder extends MainObject implements RotatingObject{
             omega.set(newOmega);
         }
 
-        double newTheta = currentTheta + omega.get() * deltaTime + 0.5 * getAcceleration() * deltaTime * deltaTime;
+        double newTheta = currentTheta + omega.get() * deltaTime;
         if (currentTheta * newTheta < 0) {
             theta.set(0);
         } else {

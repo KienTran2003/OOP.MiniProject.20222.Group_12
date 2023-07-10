@@ -73,10 +73,12 @@ public abstract class MainObject {
 
     public void updateAttribute(double appliedForce, Surface surface) {
         double deltaTime = 0.01;
-        double acc = calculateAcceleration(appliedForce, surface);
-        setAcceleration(acc);
-        setPosition(getPosition() + getVelocity() * deltaTime);
+        double oldAcc = acceleration.get();
+        double newAcc = calculateAcceleration(appliedForce, surface);
+        if (oldAcc*newAcc < 0){
+            setVelocity(0);}
 
+        setAcceleration(newAcc);
         double currentVelocity = getVelocity();
         double newVelocity = currentVelocity + acceleration.get() * deltaTime;
         if (currentVelocity * newVelocity < 0) {
@@ -84,6 +86,9 @@ public abstract class MainObject {
         } else {
             setVelocity(newVelocity);
         }
+
+        setPosition(getPosition() + getVelocity() * deltaTime);
+
     }
     double calculateGravitationalForce() {
         return this.getMass() * 10;
