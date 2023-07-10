@@ -75,7 +75,7 @@ public abstract class MainObject {
         double deltaTime = 0.01;
         double acc = calculateAcceleration(appliedForce, surface);
         setAcceleration(acc);
-        setPosition(getPosition() + getVelocity() * deltaTime + 0.5 * acc * deltaTime * deltaTime);
+        setPosition(getPosition() + getVelocity() * deltaTime);
 
         double currentVelocity = getVelocity();
         double newVelocity = currentVelocity + getAcceleration() * deltaTime;

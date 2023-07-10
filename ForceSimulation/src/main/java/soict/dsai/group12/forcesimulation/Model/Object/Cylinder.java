@@ -72,26 +72,27 @@ public class Cylinder extends MainObject implements RotatingObject{
     @Override
     public double calculateAcceleration(double appliedForce, Surface surface) {
         double angularAcceleration = calculateAngularAcceleration(appliedForce, surface);
-        gamma.set(angularAcceleration);
         double acceleration;
         if (angularAcceleration == 0) {
-            acceleration = appliedForce / getMass();
+            acceleration = appliedForce / mass.get();
+            gamma.set(0);
         } else {
-            acceleration = angularAcceleration;
+            acceleration = angularAcceleration * radius.get();
+            gamma.set(angularAcceleration);
         }
         return acceleration;
     }
 
     public double calculateAngularAcceleration(double appliedForce, Surface surface) {
         double frictionForce = calculateFrictionForces(appliedForce, surface);
-        return 2 * -frictionForce / (getMass() * Math.pow(getRadius(), 2));
+        return 2 * frictionForce / (getMass() * Math.pow(getRadius(), 2));
     }
     @Override
     public double calculateFrictionForces(double appliedForce, Surface surface) {
         double gravitationalForce = calculateGravitationalForce();
         double normalForce = calculateNormalForce(gravitationalForce);
 
-        if (Math.abs(appliedForce) <= 3 * normalForce * surface.getStaticCoefficient() && velocity.get() < 0.001) {
+        if (Math.abs(appliedForce) <= 3 * normalForce * surface.getStaticCoefficient() && velocity.get() == 0) {
             return -(appliedForce / 3);
         } else {
             if (appliedForce > 0) {
