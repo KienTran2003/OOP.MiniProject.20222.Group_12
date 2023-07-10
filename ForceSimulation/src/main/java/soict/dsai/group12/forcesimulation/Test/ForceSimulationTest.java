@@ -16,6 +16,6 @@ public class ForceSimulationTest {
         cubeBox.setSide(40);
         System.out.println("SideLength of CubicBox is: " + cubeBox.getSide());
         System.out.println("Mass of cubix box is: " + cubeBox.getMass());
-        System.out.println(cubeBox.calculateFriction(100,surface.getStaticCoefficient(), surface.getKineticCoefficient()));
+        System.out.println(cubeBox.calculateFrictionForces(100, surface));
     }
 }
