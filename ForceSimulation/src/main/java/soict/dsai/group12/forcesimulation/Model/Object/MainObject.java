@@ -77,7 +77,6 @@ public abstract class MainObject {
         double newAcc = calculateAcceleration(appliedForce, surface);
         if (oldAcc*newAcc < 0){
             setVelocity(0);}
-
         setAcceleration(newAcc);
         double currentVelocity = getVelocity();
         double newVelocity = currentVelocity + acceleration.get() * deltaTime;

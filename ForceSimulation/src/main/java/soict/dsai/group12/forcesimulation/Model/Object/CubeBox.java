@@ -25,20 +25,15 @@ public class CubeBox extends MainObject{
 
         double frictionForce = 0;
 
-        if (Math.abs(appliedForce) <= normalForce * surface.getStaticCoefficient() && this.getVelocity() == 0) {
-            frictionForce = -appliedForce;
-        } else if (Math.abs(appliedForce) > normalForce * surface.getStaticCoefficient() && this.getVelocity() == 0) {
-            if (appliedForce > 0) {
-                frictionForce = -normalForce * surface.getKineticCoefficient();
-            } else {
-                frictionForce = normalForce * surface.getKineticCoefficient();
-            }
-        } else if (this.getVelocity() < 0) {
-            frictionForce = normalForce * surface.getKineticCoefficient();
+        if (Math.abs(appliedForce) <= normalForce * surface.getStaticCoefficient() && velocity.get() == 0) {
+            return -(appliedForce);
         } else {
-            frictionForce = -normalForce * surface.getKineticCoefficient();
+            if (appliedForce > 0) {
+                return -normalForce * surface.getKineticCoefficient();
+            } else {
+                return normalForce * surface.getKineticCoefficient();
+            }
         }
-        return frictionForce;
     }
 
 
