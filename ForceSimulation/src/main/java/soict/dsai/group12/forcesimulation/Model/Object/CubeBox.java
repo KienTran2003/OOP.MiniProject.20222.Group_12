@@ -41,21 +41,6 @@ public class CubeBox extends MainObject{
         return frictionForce;
     }
 
-    @Override
-    public void updateAttribute(double appliedForce, Surface surface) {
-        double deltaTime = 0.01;
-        double acc = calculateAcceleration(appliedForce, surface);
-        setAcceleration(acc);
-        setPosition(getPosition() + getVelocity() * deltaTime);
-
-        double currentVelocity = getVelocity();
-        double newVelocity = currentVelocity + getAcceleration() * deltaTime;
-        if (currentVelocity * newVelocity < 0) {
-            setVelocity(0); // Stop when velocity changes direction
-        } else {
-            setVelocity(newVelocity);
-        }
-    }
 
     public double getSide() {
         return side;

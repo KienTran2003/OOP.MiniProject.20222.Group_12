@@ -65,79 +65,64 @@ public class Cylinder extends MainObject implements RotatingObject{
         setVelocity(0);
         setPosition(0);
         setGamma(0);
-        setOmega(0);
         setTheta(0);
+        setOmega(0);
     }
 
     @Override
     public double calculateAcceleration(double appliedForce, Surface surface) {
         double angularAcceleration = calculateAngularAcceleration(appliedForce, surface);
+        gamma.set(angularAcceleration);
         double acceleration;
         if (angularAcceleration == 0) {
             acceleration = appliedForce / getMass();
         } else {
-            acceleration = angularAcceleration * getRadius();
+            acceleration = angularAcceleration;
         }
         return acceleration;
     }
 
     public double calculateAngularAcceleration(double appliedForce, Surface surface) {
         double frictionForce = calculateFrictionForces(appliedForce, surface);
-        double angularAcceleration = frictionForce / (0.5 * getMass() * Math.pow(getRadius(), 2));
-        return angularAcceleration;
+        return 2 * -frictionForce / (getMass() * Math.pow(getRadius(), 2));
     }
-
     @Override
     public double calculateFrictionForces(double appliedForce, Surface surface) {
         double gravitationalForce = calculateGravitationalForce();
         double normalForce = calculateNormalForce(gravitationalForce);
 
-        if (Math.abs(appliedForce) <= 3 * normalForce * surface.getStaticCoefficient() && this.getOmega() == 0) {
-            return -appliedForce / 3;
-        } else if (Math.abs(appliedForce) > 3 * normalForce * surface.getStaticCoefficient() && this.getOmega() == 0) {
+        if (Math.abs(appliedForce) <= 3 * normalForce * surface.getStaticCoefficient() && velocity.get() < 0.001) {
+            return -(appliedForce / 3);
+        } else {
             if (appliedForce > 0) {
                 return -normalForce * surface.getKineticCoefficient();
             } else {
                 return normalForce * surface.getKineticCoefficient();
             }
-        } else if (this.getOmega() < 0) {
-            return normalForce * surface.getKineticCoefficient();
-        } else {
-            return -normalForce * surface.getKineticCoefficient();
         }
     }
 
     public void updateAttribute(double appliedForce, Surface surface) {
         double deltaTime = 0.01;
+        super.updateAttribute(appliedForce, surface);
 
-        // Cập nhật gia tốc dựa trên lực tác dụng
-        double newGamma = calculateAngularAcceleration(appliedForce, surface);
-        setGamma(newGamma);
-        double acc = calculateAcceleration(appliedForce, surface);
-        acceleration.set(acc);
+        // Cập nhật vận tốc góc và vị trí góc của Cylinder
+        double currentTheta = theta.get();
+        double currentOmega = omega.get();
 
-        if (this.getOmega()*(this.getOmega() + deltaTime * newGamma) < 0){
-            this.setOmega(0);
+        double newOmega = currentOmega + acceleration.get() * deltaTime;
+        if (currentOmega * newOmega < 0) {
+            omega.set(0);
         } else {
-            this.setOmega(this.getOmega() + deltaTime * newGamma);
-        }
-        if (this.getTheta()*(this.getTheta() + deltaTime * this.getOmega()) < 0){
-            this.setTheta(0);
-        } else {
-            this.setTheta(this.getTheta() + deltaTime * this.getOmega());
+            omega.set(newOmega);
         }
 
-        double currentVelocity = getVelocity();
-        double newVelocity = currentVelocity + getAcceleration() * deltaTime;
-        if (currentVelocity * newVelocity < 0) {
-            velocity.set(0);
+        double newTheta = currentTheta + omega.get() * deltaTime + 0.5 * getAcceleration() * deltaTime * deltaTime;
+        if (currentTheta * newTheta < 0) {
+            theta.set(0);
         } else {
-            velocity.set(newVelocity);
+            theta.set(newTheta);
         }
-
-        double linearVelocity = getRadius() * getOmega();
-        double currentPosition = getPosition();
-        double newLinearPosition = currentPosition + linearVelocity * deltaTime;
-        setPosition(newLinearPosition);
     }
+
 }

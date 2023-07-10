@@ -71,7 +71,20 @@ public abstract class MainObject {
 
     public abstract double calculateFrictionForces(double appliedForce, Surface surface);
 
-    public abstract void updateAttribute(double appliedForce, Surface surface);
+    public void updateAttribute(double appliedForce, Surface surface) {
+        double deltaTime = 0.01;
+        double acc = calculateAcceleration(appliedForce, surface);
+        setAcceleration(acc);
+        setPosition(getPosition() + getVelocity() * deltaTime + 0.5 * acc * deltaTime * deltaTime);
+
+        double currentVelocity = getVelocity();
+        double newVelocity = currentVelocity + getAcceleration() * deltaTime;
+        if (currentVelocity * newVelocity < 0) {
+            setVelocity(0); // Stop when velocity changes direction
+        } else {
+            setVelocity(newVelocity);
+        }
+    }
     double calculateGravitationalForce() {
         return this.getMass() * 10;
     }
