@@ -78,7 +78,7 @@ public abstract class MainObject {
         setPosition(getPosition() + getVelocity() * deltaTime);
 
         double currentVelocity = getVelocity();
-        double newVelocity = currentVelocity + getAcceleration() * deltaTime;
+        double newVelocity = currentVelocity + acceleration.get() * deltaTime;
         if (currentVelocity * newVelocity < 0) {
             setVelocity(0); // Stop when velocity changes direction
         } else {

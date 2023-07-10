@@ -68,7 +68,7 @@ public class SceneController implements Initializable {
     Slider staticSlider, kineticSlider;
 
     KeyFrame keyFrame = new KeyFrame(originalDuration, event -> {
-        roadController.move(sliderController.getMainObject().getVelocity());
+        roadController.move(sliderController.getMainObject().getVelocity()*0.1);
 
 
         rotation.setAngle(rotation.getAngle() + cylinder.getVelocity());

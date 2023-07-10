@@ -37,8 +37,8 @@ public class Surface {
     public void setKineticCoefficient(double kineticCoefficient) {
         if (kineticCoefficient < 0) {
             this.kineticCoefficient = 0;
-        } else if (kineticCoefficient > getStaticCoefficient()) {
-            this.kineticCoefficient= (getStaticCoefficient() - 0.001);
+        } else if (kineticCoefficient >= getStaticCoefficient() && getStaticCoefficient() != 0) {
+            this.kineticCoefficient = (getStaticCoefficient() - 0.001);
         } else {
             this.kineticCoefficient = kineticCoefficient;
         }
