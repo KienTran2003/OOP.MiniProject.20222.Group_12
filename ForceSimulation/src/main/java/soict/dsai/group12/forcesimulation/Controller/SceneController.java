@@ -104,11 +104,11 @@ public class SceneController implements Initializable {
         circle.getTransforms().add(rotation);
 
 //        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cube_image.png")));
-        recBox.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cube.png")));
+        recBox.setFill(new ImagePattern(new Image("https://raw.githubusercontent.com/KienTran2003/OOP.MiniProject.20222.Group_12/main/ForceSimulation/src/main/resources/soict/dsai/group12/forcesimulation/Image/cube.png")));
 //        recBox.setFill(new ImagePattern(new Image("https://github.com/KienTran2003/OOP.MiniProject.20222.Group_12/blob/02b8b5c9a7b94990ae777d1458cb644ce4ffc1a9/ForceSimulation/src/main/resources/soict/dsai/group12/forcesimulation/Image/cube.png")));
 //        Image img = new Image("/ForceSimulation/src/main/resources/soict/dsai/group12/forcesimulation/Image/cube.png");
 //        recBox.setFill(new ImagePattern(new Image("cube.png")));
-        circle.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\cylinder.png")));
+        circle.setFill(new ImagePattern(new Image("https://raw.githubusercontent.com/KienTran2003/OOP.MiniProject.20222.Group_12/main/ForceSimulation/src/main/resources/soict/dsai/group12/forcesimulation/Image/cylinder.png")));
 //        locationObj.setFill(new ImagePattern(new Image("C:\\Users\\Lenovo\\Desktop\\HUST\\20222\\OOP\\MiniProject\\OOP.MiniProject.20222.Group_12\\ForceSimulation\\src\\main\\resources\\soict\\dsai\\group12\\forcesimulation\\Image\\locationObj.png")));
 
         //Load road
